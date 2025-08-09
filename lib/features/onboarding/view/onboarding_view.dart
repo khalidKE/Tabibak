@@ -1,69 +1,81 @@
+// onboarding_view.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tabibak/core/constant/colors.dart';
+import 'package:tabibak/core/constant/string.dart';
 import 'package:tabibak/core/utils/on_boarding_list.dart';
 import 'package:tabibak/features/onboarding/view/widget/on_boarding_bottom_nav.dart';
-import 'package:tabibak/features/onboarding/view/widget/on_boarding_pages.dart';
-import 'package:tabibak/core/constant/string.dart';
+import 'package:tabibak/features/onboarding/view_model/cubit/on_boarding_cubit.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class OnboardingView extends StatefulWidget {
+class OnboardingView extends StatelessWidget {
   const OnboardingView({super.key});
 
-  @override
-  State<OnboardingView> createState() => _OnboardingViewState();
-}
-
-class _OnboardingViewState extends State<OnboardingView> {
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-
-  void _goToLogin() {
+  void _goToLogin(BuildContext context) {
     Navigator.pushReplacementNamed(context, Routes.login);
-  }
-
-  void _nextPage() {
-    if (_currentPage < onBoadingList.length - 1) {
-      _pageController.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    } else {
-      _goToLogin();
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page?.round() ?? 0;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            child: OnBoardingPages(
-              controller: _pageController,
-              pages: onBoadingList,
-            ),
-          ),
-          OnBoardingBottomNav(
-            currentIndexPage: _currentPage.toDouble(),
-            pageCount: onBoadingList.length,
-            onNext: _nextPage,
-            onSkip: _goToLogin,
-          ),
-        ],
+    final PageController pageController = PageController();
+
+    return BlocProvider(
+      create: (_) => OnBoardingCubit(),
+      child: Scaffold(
+        body: BlocBuilder<OnBoardingCubit, OnBoardingState>(
+          builder: (context, state) {
+            final cubit = context.read<OnBoardingCubit>();
+
+            return Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: pageController,
+                    itemCount: onBoadingList.length,
+                    onPageChanged: (index) => cubit.changePage(index),
+                    itemBuilder: (context, index) {
+                      final page = onBoadingList[index];
+                      return Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              page.image!,
+                              height: 450,
+                              width: 300,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(height: 40),
+                            Text(
+                              page.title!,
+                              style: GoogleFonts.montserrat(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                                color:ColorsApp.kPrimaryColor,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                OnBoardingBottomNav(
+                  currentIndexPage: state.currentPage.toDouble(),
+                  pageCount: onBoadingList.length,
+                  onNext: () => cubit.nextPage(
+                    onBoadingList.length,
+                    () => _goToLogin(context),
+                    pageController,
+                  ),
+                  onSkip: () => cubit.skip(() => _goToLogin(context)),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
