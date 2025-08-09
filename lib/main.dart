@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tabibak/core/constant/string.dart';
+import 'package:tabibak/core/routing/router.dart';
 import 'package:tabibak/features/splash/view/splash_view.dart';
+
 
 
 void main() {
@@ -15,9 +18,12 @@ class Tabibak extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appRouter = AppRouter();
     return MaterialApp(
+      title: 'Tabibak',
       debugShowCheckedModeBanner: false,
-      home: SplashView(),
+      initialRoute: Routes.splash,
+      onGenerateRoute: appRouter.generatRoute,
 
     );
   }
