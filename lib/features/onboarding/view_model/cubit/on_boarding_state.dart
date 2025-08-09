@@ -1,4 +1,4 @@
-// on_boarding_state.dart
+
 part of 'on_boarding_cubit.dart';
 
 class OnBoardingState {
