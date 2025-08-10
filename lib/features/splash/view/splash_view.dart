@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:tabibak/core/constant/colors.dart';
-import 'package:tabibak/features/onboarding/view/onboarding_view.dart';
+import 'package:tabibak/core/constant/string.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -16,13 +16,14 @@ class _SplashViewState extends State<SplashView> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 4), () {
-      Navigator.pushReplacement(
+      Navigator.pushReplacementNamed(
         context,
-        MaterialPageRoute(builder: (context) => const OnboardingView()),
+        Routes.onBoarding,
       );
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorsApp.kPrimaryColor,
