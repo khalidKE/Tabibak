@@ -345,31 +345,4 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
-
-  Widget _buildSocialButton(
-    String label,
-    IconData icon,
-    VoidCallback onPressed,
-  ) {
-    return Expanded(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        child: OutlinedButton.icon(
-          onPressed: onPressed,
-          icon: Icon(icon, color: ColorsApp.kPrimaryColor),
-          label: Text(
-            label,
-            style: TextStyle(color: ColorsApp.kPrimaryColor, fontSize: 12),
-          ),
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            side: BorderSide(color: ColorsApp.kPrimaryColor),
-          ),
-        ),
-      ),
-    );
-  }
 }
