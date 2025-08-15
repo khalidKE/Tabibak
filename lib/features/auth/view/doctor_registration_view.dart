@@ -118,7 +118,7 @@ class _DoctorRegistrationViewState extends State<DoctorRegistrationView> {
         
         Navigator.pushNamedAndRemoveUntil(
           context, 
-          Routes.home, 
+          Routes.doctorDashboard, 
           (route) => false
         );
       });

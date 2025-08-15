@@ -19,6 +19,7 @@ class _LoginViewState extends State<LoginView> {
   bool _isLoading = false;
   String? _phoneError;
   String? _passwordError;
+  String _userRole = 'patient'; // Default role
 
   @override
   void dispose() {
@@ -69,9 +70,13 @@ class _LoginViewState extends State<LoginView> {
         setState(() {
           _isLoading = false;
         });
+        
+        // Redirect based on user role
+        String targetRoute = _userRole == 'doctor' ? Routes.doctorDashboard : Routes.home;
+        
         Navigator.pushNamedAndRemoveUntil(
           context,
-          Routes.home,
+          targetRoute,
           (route) => false,
         );
       });
@@ -115,6 +120,85 @@ class _LoginViewState extends State<LoginView> {
                 ),
 
                 const SizedBox(height: 60),
+
+                // Role Selection
+                Container(
+                  decoration: BoxDecoration(
+                    color: ColorsApp.kWhiteColor,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButtonFormField<String>(
+                      value: _userRole,
+                      decoration: InputDecoration(
+                        hintText: 'Select your role',
+                        hintStyle: TextStyle(
+                          color: ColorsApp.kSecondaryTextColor,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: ColorsApp.kPrimaryColor,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(16),
+                      ),
+                      items: [
+                        DropdownMenuItem(
+                          value: 'patient',
+                          child: Row(
+                            children: [
+                              Icon(Icons.person, color: ColorsApp.kPrimaryColor),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Patient',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16,
+                                  color: ColorsApp.kTextColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'doctor',
+                          child: Row(
+                            children: [
+                              Icon(Icons.medical_services, color: ColorsApp.kPrimaryColor),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Doctor',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 16,
+                                  color: ColorsApp.kTextColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onChanged: (value) {
+                        setState(() {
+                          _userRole = value!;
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select your role';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 20),
 
                 Container(
                   decoration: BoxDecoration(

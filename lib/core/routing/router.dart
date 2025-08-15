@@ -9,6 +9,7 @@ import 'package:tabibak/features/onboarding/view/onboarding_view.dart';
 import 'package:tabibak/features/splash/view/splash_view.dart';
 import 'package:tabibak/features/home/view/home_view.dart';
 import 'package:tabibak/features/doctor_discovery/view/doctor_discovery_view.dart';
+import 'package:tabibak/features/doctor_discovery/view/doctor_dashboard_view.dart';
 import 'package:tabibak/features/symptom_checker/view/symptom_checker_view.dart';
 import 'package:tabibak/features/profile/view/profile_view.dart';
 import 'package:tabibak/features/appointment_booking/view/appointment_booking_view.dart';
@@ -40,6 +41,8 @@ class AppRouter {
 
       case Routes.home:
         return MaterialPageRoute(builder: (_) => HomeView());
+      case Routes.doctorDashboard:
+        return MaterialPageRoute(builder: (_) => DoctorDashboardView());
       case Routes.doctorDiscovery:
         return MaterialPageRoute(builder: (_) => DoctorDiscoveryView());
       case Routes.symptomChecker:
